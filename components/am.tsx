@@ -114,7 +114,7 @@ export function PersonCard({ p, selected, onSelect, onView, footer, highlight }:
         )}
         <div className="absolute inset-x-0 bottom-0 p-4 text-primary-foreground">
           <h3 className="text-2xl font-semibold leading-none">{p.name}</h3>
-          <p className="mt-1 text-xs opacity-85">{p.role} Â· {p.company}</p>
+          <p className="mt-1 text-xs opacity-85">{p.role} · {p.company}</p>
         </div>
       </div>
       <div className="space-y-3 p-4">
@@ -168,7 +168,7 @@ export function ProfileDetail({ p, onClose, backLabel = "Back" }: { p: Person; o
         <div className="flex flex-col justify-end p-6 sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Profile</p>
           <h2 className="mt-2 text-4xl font-semibold">{p.name}</h2>
-          <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground"><Briefcase className="h-4 w-4" />{p.role} Â· {p.company}</p>
+          <p className="mt-2 flex items-center gap-2 text-sm text-muted-foreground"><Briefcase className="h-4 w-4" />{p.role} · {p.company}</p>
           <p className="mt-1 flex items-center gap-2 text-sm text-muted-foreground"><MapPin className="h-4 w-4" />{p.details[0]?.value}</p>
           <p className="mt-4 text-[15px] leading-relaxed">{p.summary}</p>
           <div className="mt-5 flex gap-2">
@@ -188,7 +188,7 @@ export function ProfileDetail({ p, onClose, backLabel = "Back" }: { p: Person; o
           <dl className="space-y-1.5 text-sm">{p.details.map((d) => <div key={d.label} className="flex justify-between gap-3"><dt className="text-muted-foreground">{d.label}</dt><dd className="font-medium">{d.value}</dd></div>)}</dl>
         </Section>
         <Section icon={<HelpCircle className="h-3.5 w-3.5" />} title="Unknown or uncertain">
-          <ul className="space-y-1 text-sm text-muted-foreground">{p.unknown.map((u) => <li key={u}>{u} â€” not enough evidence</li>)}</ul>
+          <ul className="space-y-1 text-sm text-muted-foreground">{p.unknown.map((u) => <li key={u}>{u} — not enough evidence</li>)}</ul>
         </Section>
       </div>
       <div className="px-6 pb-8 sm:px-8"><Btn variant="soft" onClick={onClose}>{backLabel}</Btn></div>
@@ -238,7 +238,7 @@ export function ConversationThread({ rep, cand, date }: { rep: Person; cand: Per
   );
 }
 
-// â”€â”€â”€ Date Theater â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Date Theater ──────────────────────────────────────────────────────────────
 
 export function DateTheater({
   rep,
@@ -304,12 +304,12 @@ export function DateTheater({
     return () => clearInterval(t);
   }, [isReading, allFields.length]);
 
-  const statusLabel = isLive ? "Live Date" : isCompleted ? "Date Completed" : isFailed ? "Date Failed" : "Agent Readingâ€¦";
+  const statusLabel = isLive ? "Live Date" : isCompleted ? "Date Completed" : isFailed ? "Date Failed" : "Agent Reading…";
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-background animate-rise">
 
-      {/* â”€â”€ Top Bar â”€â”€ */}
+      {/* ── Top Bar ── */}
       <div className="flex shrink-0 items-center justify-between border-b border-border bg-card/80 px-4 py-3 backdrop-blur sm:px-6">
         <div className="flex items-center gap-3">
           <span className="flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-primary">
@@ -332,7 +332,7 @@ export function DateTheater({
         </div>
       </div>
 
-      {/* â”€â”€ Participant Header â”€â”€ */}
+      {/* ── Participant Header ── */}
       <div className="shrink-0 border-b border-border bg-card/50 px-4 py-4 backdrop-blur sm:px-6">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
           {/* Rep */}
@@ -355,10 +355,10 @@ export function DateTheater({
             {(isLive || isCompleted) && (
               <p className="text-[10px] font-semibold text-muted-foreground">{isLive ? `Turn ${turn} / 16` : "Finished"}</p>
             )}
-            {isReading && <p className="text-[10px] font-semibold text-primary animate-pulse">Scanning profileâ€¦</p>}
+            {isReading && <p className="text-[10px] font-semibold text-primary animate-pulse">Scanning profile…</p>}
           </div>
 
-          {/* Cand â€” tap to toggle peek in chat */}
+          {/* Cand — tap to toggle peek in chat */}
           <button
             className="flex flex-row-reverse items-center gap-3 text-right focus:outline-none"
             onClick={() => (isLive || isCompleted) && setPeekOpen((o) => !o)}
@@ -376,7 +376,7 @@ export function DateTheater({
               {isLive && (
                 <div className="absolute inset-0 flex items-end justify-center pb-1">
                   <span className="rounded-full bg-black/60 px-1.5 py-0.5 text-[8px] font-bold uppercase text-white/90">
-                    {peekOpen ? "â–¼ hide" : "â–² profile"}
+                    {peekOpen ? "▼ hide" : "▲ profile"}
                   </span>
                 </div>
               )}
@@ -399,7 +399,7 @@ export function DateTheater({
         )}
       </div>
 
-      {/* â”€â”€ Reading State: Animated profile scan â”€â”€ */}
+      {/* ── Reading State: Animated profile scan ── */}
       {isReading && (
         <div className="flex flex-1 items-center justify-center p-6">
           <div className="w-full max-w-md rounded-3xl border border-border bg-card p-6 shadow-[var(--shadow-card)] animate-rise">
@@ -441,13 +441,13 @@ export function DateTheater({
               </div>
             </div>
             <p className="mt-5 text-center text-[11px] text-muted-foreground animate-pulse">
-              Preparing {rep.name.split(" ")[0]}&apos;s opening messageâ€¦
+              Preparing {rep.name.split(" ")[0]}&apos;s opening message…
             </p>
           </div>
         </div>
       )}
 
-      {/* â”€â”€ Failed State â”€â”€ */}
+      {/* ── Failed State ── */}
       {isFailed && (
         <div className="flex flex-1 items-center justify-center p-6 text-center">
           <div>
@@ -458,10 +458,10 @@ export function DateTheater({
         </div>
       )}
 
-      {/* â”€â”€ Live / Completed Chat â”€â”€ */}
+      {/* ── Live / Completed Chat ── */}
       {(isLive || isCompleted) && (
         <>
-          {/* Profile peek panel â€” slides down when candidate is typing or user taps her photo */}
+          {/* Profile peek panel — slides down when candidate is typing or user taps her photo */}
           <div className={cn(
             "shrink-0 overflow-hidden transition-all duration-500 ease-in-out border-b border-border bg-secondary/30",
             peekOpen ? "max-h-52" : "max-h-0 border-0"
@@ -474,7 +474,7 @@ export function DateTheater({
               {/* Scrollable info */}
               <div className="flex-1 overflow-y-auto space-y-2 py-0.5 pr-2">
                 <p className="text-[11px] font-bold uppercase tracking-wider text-primary">
-                  {candIsTyping ? `${cand.name.split(" ")[0]} is typingâ€¦ read her profile while you wait` : `${cand.name.split(" ")[0]}'s Profile`}
+                  {candIsTyping ? `${cand.name.split(" ")[0]} is typing… read her profile while you wait` : `${cand.name.split(" ")[0]}'s Profile`}
                 </p>
                 <p className="text-xs leading-relaxed text-muted-foreground line-clamp-3">{cand.summary}</p>
                 <div className="flex flex-wrap gap-1">
@@ -492,7 +492,7 @@ export function DateTheater({
         </>
       )}
 
-      {/* â”€â”€ Score Reveal (completed) â”€â”€ */}
+      {/* ── Score Reveal (completed) ── */}
       {isCompleted && (
         <div className="shrink-0 border-t border-border bg-card/80 px-4 py-4 backdrop-blur sm:px-6">
           <div className="mx-auto max-w-3xl">
@@ -538,7 +538,7 @@ export function DateTheater({
 
       {/* Disclaimer */}
       <div className="shrink-0 border-t border-border bg-card/50 px-4 py-2 text-center text-[10px] text-muted-foreground">
-        Simulated AI conversation Â· Not an authentic statement of anyone&apos;s romantic preferences
+        Simulated AI conversation · Not an authentic statement of anyone&apos;s romantic preferences
       </div>
     </div>
   );

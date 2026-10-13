@@ -13,33 +13,27 @@ export default function Board() {
   const router = useRouter();
   const [viewing, setViewing] = useState<Person | null>(null);
   const [theaterOpen, setTheaterOpen] = useState(false);
+  // Candidate the user chose to watch; null means follow the live date.
+  const [focusId, setFocusId] = useState<string | null>(null);
   const rep = repId ? findPerson(repId) : undefined;
 
   const prevRunning = useRef(running);
 
-  // Determine the active candidate (in_progress or last started)
   const cands = rep ? candidatesFor(rep) : [];
-  const activeCand = cands.find((c) => dates[c.id]?.status === "in_progress")
-    ?? cands.find((c) => dates[c.id]?.status === "not_started" && running)
-    ?? cands.find((c) => dates[c.id]?.status === "completed" && running);
 
-  // When dating starts, auto-open theater
+  // Open the theater once when dating starts, following the live date. Closing it keeps it closed.
   useEffect(() => {
     if (running && !prevRunning.current) {
+      setFocusId(null);
       setTheaterOpen(true);
     }
     prevRunning.current = running;
   }, [running]);
 
-  // Auto-open theater when an in_progress date appears
-  const hasLiveDate = cands.some((c) => dates[c.id]?.status === "in_progress");
-  const prevHasLive = useRef(hasLiveDate);
-  useEffect(() => {
-    if (hasLiveDate && !prevHasLive.current && running) {
-      setTheaterOpen(true);
-    }
-    prevHasLive.current = hasLiveDate;
-  }, [hasLiveDate, running]);
+  const openTheater = (candidateId: string | null) => {
+    setFocusId(candidateId);
+    setTheaterOpen(true);
+  };
 
   if (!rep) {
     return (
@@ -57,8 +51,9 @@ export default function Board() {
   const done = cands.filter((c) => dates[c.id]?.status === "completed").length;
   const allDone = done === cands.length;
 
-  // Theater candidate: in_progress wins, else last started, else first candidate
-  const theaterCand = cands.find((c) => dates[c.id]?.status === "in_progress")
+  // Theater candidate: the one the user clicked, else the live date, else the last completed, else the first
+  const theaterCand = (focusId ? cands.find((c) => c.id === focusId) : undefined)
+    ?? cands.find((c) => dates[c.id]?.status === "in_progress")
     ?? cands.slice().reverse().find((c) => dates[c.id]?.status === "completed")
     ?? cands[0];
 
@@ -66,7 +61,7 @@ export default function Board() {
 
   const handleStartDating = () => {
     startDating();
-    setTheaterOpen(true);
+    openTheater(null);
   };
 
   return (
@@ -90,7 +85,7 @@ export default function Board() {
             {/* Live View toggle — only shown when dating is active or paused mid-run */}
             {(running || done > 0) && (
               <button
-                onClick={() => setTheaterOpen(true)}
+                onClick={() => openTheater(null)}
                 className="flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-semibold text-primary transition hover:bg-primary/20"
               >
                 <Tv2 className="h-3.5 w-3.5" />
@@ -129,7 +124,7 @@ export default function Board() {
                   </Btn>
                 ) : running ? (
                   <>
-                    <Btn variant="soft" className="flex-1" onClick={() => setTheaterOpen(true)}>
+                    <Btn variant="soft" className="flex-1" onClick={() => openTheater(null)}>
                       <Tv2 className="h-4 w-4" />Watch Live
                     </Btn>
                     <Btn variant="outline" className="flex-1" onClick={stopDating}>
@@ -171,7 +166,7 @@ export default function Board() {
                       {(status === "in_progress" || status === "completed") && (
                         <button
                           className="flex flex-1 items-center justify-center gap-2 rounded-full bg-secondary px-4 py-2 text-sm font-semibold text-secondary-foreground transition hover:bg-secondary/80"
-                          onClick={() => setTheaterOpen(true)}
+                          onClick={() => openTheater(c.id)}
                         >
                           <MessageCircle className="h-4 w-4" />
                           {status === "completed" ? "See Conversation" : "Watch Live"}
