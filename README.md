@@ -29,11 +29,11 @@ flowchart LR
     analyst --> profiles[Dating profiles in Supabase]
   end
   subgraph dashboard [Pipeline B - dating dashboard]
-    pick[Choose a person] --> start[Start Dating]
-    start --> runNext["POST /api/dates/run-next"]
+    pick[Choose a person] --> startBtn[Start Dating]
+    startBtn --> runNext["POST /api/dates/run-next"]
     profiles --> runNext
-    runNext --> graph[LangGraph date]
-    graph --> judge[Judge agent]
+    runNext --> dateGraph[LangGraph date]
+    dateGraph --> judge[Judge agent]
     judge --> ranking[Ranked matches]
   end
 ```
