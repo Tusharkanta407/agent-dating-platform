@@ -23,8 +23,27 @@ export function DemoBadge() {
   return <span className="rounded-full border border-primary/20 bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">Simulated personas</span>;
 }
 
+export function getFallbackAvatar(name: string, w = 200, h = 200) {
+  const initials = name.split(" ").map((n) => n[0]).filter(Boolean).slice(0, 2).join("").toUpperCase();
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}"><rect width="${w}" height="${h}" fill="#2e1420"/><text x="50%" y="53%" text-anchor="middle" dominant-baseline="middle" font-family="system-ui,sans-serif" font-weight="700" font-size="${Math.round(Math.min(w, h) * 0.38)}" fill="#f295ad">${initials}</text></svg>`;
+  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
+
 export function Avatar({ p, size = 40, ring }: { p: Person; size?: number; ring?: boolean }) {
-  return <img src={p.photo} alt={p.name} width={size} height={size} style={{ width: size, height: size }} className={cn("rounded-full object-cover", ring && "ring-2 ring-card ring-offset-2 ring-offset-primary/30")} />;
+  return (
+    <img
+      src={p.photo}
+      alt={p.name}
+      width={size}
+      height={size}
+      style={{ width: size, height: size }}
+      referrerPolicy="no-referrer"
+      onError={(e) => {
+        (e.currentTarget as HTMLImageElement).src = getFallbackAvatar(p.name, size, size);
+      }}
+      className={cn("rounded-full object-cover shrink-0", ring && "ring-2 ring-card ring-offset-2 ring-offset-primary/30")}
+    />
+  );
 }
 
 export function Btn({ variant = "primary", className, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement> & { variant?: "primary" | "outline" | "ghost" | "soft" }) {
@@ -76,7 +95,16 @@ export function PersonCard({ p, selected, onSelect, onView, footer, highlight }:
       )}
     >
       <div className="relative aspect-[4/5] overflow-hidden">
-        <img src={p.photo} alt={p.name} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+        <img
+          src={p.photo}
+          alt={p.name}
+          loading="lazy"
+          referrerPolicy="no-referrer"
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).src = getFallbackAvatar(p.name, 400, 500);
+          }}
+          className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+        />
         <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/0 to-transparent" />
         {selected && (
           <span className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-primary text-primary-foreground animate-rise"><Check className="h-4 w-4" /></span>
@@ -128,7 +156,15 @@ export function ProfileDetail({ p, onClose, backLabel = "Back" }: { p: Person; o
   return (
     <div>
       <div className="grid gap-0 sm:grid-cols-[260px_1fr]">
-        <img src={p.photo} alt={p.name} className="aspect-[4/5] h-full w-full object-cover sm:rounded-tl-3xl" />
+        <img
+          src={p.photo}
+          alt={p.name}
+          referrerPolicy="no-referrer"
+          onError={(e) => {
+            (e.currentTarget as HTMLImageElement).src = getFallbackAvatar(p.name, 400, 500);
+          }}
+          className="aspect-[4/5] h-full w-full object-cover sm:rounded-tl-3xl"
+        />
         <div className="flex flex-col justify-end p-6 sm:p-8">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Profile</p>
           <h2 className="mt-2 text-4xl font-semibold">{p.name}</h2>

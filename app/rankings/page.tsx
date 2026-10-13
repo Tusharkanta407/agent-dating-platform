@@ -38,7 +38,12 @@ export default function Rankings() {
                 <div className="flex items-center gap-4">
                   <span className={cn("w-10 text-center font-serif text-4xl font-semibold", i < 3 ? "text-primary" : "text-muted-foreground")}>{i + 1}</span>
                   <div className="relative">
-                    <img src={c.photo} alt={c.name} className="h-20 w-20 rounded-2xl object-cover" />
+                    <img
+                      src={c.photo}
+                      alt={c.name}
+                      referrerPolicy="no-referrer"
+                      className="h-20 w-20 rounded-2xl object-cover"
+                    />
                     {i === 0 && <Crown className="absolute -right-2 -top-2 h-6 w-6 rounded-full bg-card p-1 text-gold" />}
                   </div>
                 </div>
