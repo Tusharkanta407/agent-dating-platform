@@ -77,3 +77,12 @@
 @utility animate-rise { animation: rise 0.45s cubic-bezier(.2,.7,.2,1) both; }
 @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }
 @utility animate-shimmer { animation: shimmer 1.4s ease-in-out infinite; }
+@keyframes scan { 0% { transform: translateY(-100%); opacity: 0.7; } 100% { transform: translateY(400%); opacity: 0; } }
+@utility animate-scan { animation: scan 1.8s ease-in-out infinite; }
+@keyframes pulse-ring { 0%,100% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 35%, transparent); } 50% { box-shadow: 0 0 0 8px transparent; } }
+@utility animate-pulse-ring { animation: pulse-ring 2s ease-in-out infinite; }
+@keyframes score-pop { 0% { transform: scale(0.6); opacity: 0; } 70% { transform: scale(1.08); } 100% { transform: scale(1); opacity: 1; } }
+@utility animate-score-pop { animation: score-pop 0.55s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes msg-in { from { opacity: 0; transform: translateY(12px) scale(0.97); } to { opacity: 1; transform: none; } }
+@utility animate-msg-in { animation: msg-in 0.35s cubic-bezier(.2,.7,.2,1) both; }
+
