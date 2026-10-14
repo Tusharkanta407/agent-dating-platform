@@ -1,20 +1,52 @@
+<div align="center">
+
 # AgentMatch
 
-**AI dating agents that date on your behalf.** Pick one of 25 Indian founders, press **Start Dating**, and watch their AI agent go on a live first-date chat with every match. Each date is scored, and the matches are ranked by who fits best.
+### AI dating agents that date on your behalf
 
-> All conversations are simulated by AI from public profile information. They are not real conversations and do not represent anyone's actual romantic preferences.
+Pick one of 25 Indian founders, press **Start Dating**, and watch their AI agent go on a live first-date chat with every match. Each date is scored, and matches are ranked by fit.
+
+![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=nextdotjs)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
+![LangGraph](https://img.shields.io/badge/LangGraph-agents-1C3C3C)
+![Supabase](https://img.shields.io/badge/Supabase-Postgres-3ECF8E?logo=supabase&logoColor=white)
+
+</div>
+
+<a href="https://www.loom.com/share/83cf2be5671c47d399b1c8ea619c7dac">
+  <img src="docs/demo.gif" alt="AgentMatch demo. Click to watch on Loom." width="100%">
+</a>
+
+### [Watch the demo on Loom](https://www.loom.com/share/83cf2be5671c47d399b1c8ea619c7dac)
+
+> **Disclaimer:** All conversations are simulated by AI from public profile information. They are not real conversations and do not represent anyone's actual romantic preferences.
 
 ---
 
-## Demo video
+## Contents
 
-[![AgentMatch demo](https://img.youtube.com/vi/WQeE1pkiRm8/hqdefault.jpg)](https://youtu.be/WQeE1pkiRm8)
+- [Features](#features)
+- [How it works](#how-it-works)
+- [How the judge scores a date](#how-the-judge-scores-a-date)
+- [Tech stack](#tech-stack)
+- [Data model](#data-model)
+- [Project structure](#project-structure)
+- [Getting started](#getting-started)
+- [Commands](#commands)
+- [Responsible use](#responsible-use)
+- [Known limitations](#known-limitations)
 
-**Watch on YouTube:** [https://youtu.be/WQeE1pkiRm8](https://youtu.be/WQeE1pkiRm8)
+---
 
-**Full recording:** [loom-video-1791939831115.mp4](loom-video-1791939831115.mp4)
+## Features
 
-<video src="loom-video-1791939831115.mp4" controls width="100%"></video>
+- **25 founder profiles** built from public LinkedIn and Instagram data
+- **Live agent-to-agent dates**, streamed message by message into the browser
+- **Distinct texting styles** for every agent, so chats feel different
+- **Transparent scoring** across five weighted criteria, calculated in code
+- **Ranked matches** ordered by compatibility
+- **Privacy-first backend**: Row Level Security on every table, secrets never reach the browser
 
 ---
 
@@ -44,11 +76,11 @@ flowchart LR
 
 1. The 25 people in `data.md` (name, gender, company, LinkedIn URL, Instagram URL) are seeded into Supabase.
 2. Apify scrapes each person's public Instagram profile (bio, category, recent captions, hashtags, locations) and public LinkedIn profile (headline, about, experience, education).
-3. The raw scrape results are saved in `source_profiles`.
-4. A profile analysis agent (GPT-4o-mini through OpenRouter) turns that text into a structured dating profile: **needs**, **hobbies**, **interests**, **personal details**, and **uncertainties**. It is told to use only the scraped text and never to invent private details.
-5. The dating profile is saved in `dating_profiles`.
+3. Raw scrape results are saved in `source_profiles`.
+4. A profile analysis agent (GPT-4o-mini via OpenRouter) turns that text into a structured dating profile: **needs**, **hobbies**, **interests**, **personal details** and **uncertainties**. It is instructed to use only the scraped text and never invent private details.
+5. The result is saved in `dating_profiles`.
 
-This runs once with `npm run build-profiles`, which prints progress such as `12/25 Namita Thapar (linkedin: ok, instagram: ok)`. Re-running it skips finished people and retries only failed scrapes.
+This runs once with `npm run build-profiles`, which prints progress such as `12/25 Namita Thapar (linkedin: ok, instagram: ok)`. Re-running skips finished people and retries only failed scrapes.
 
 ### Pipeline B: the agents go on dates
 
@@ -57,24 +89,16 @@ This runs once with `npm run build-profiles`, which prints progress such as `12/
 3. Each date is a **LangGraph** state graph:
    - **Representative turn:** the agent texts on behalf of the chosen person, using their dating profile.
    - **Match turn:** the other agent replies from its own profile.
-   - The two alternate for **16 short messages (8 each)**. Each agent has its own texting style.
+   - The two alternate for **16 short messages (8 each)**, each with its own texting style.
    - **Judge:** scores the date and explains the fit.
 4. Every message is saved to Supabase and streamed to the browser as it is written, so the chat appears live while that match's card is highlighted.
-5. Once all dates are done, the **Rankings** page orders every match by compatibility score.
+5. When all dates are done, the **Rankings** page orders every match by compatibility score.
 
-Dating reads only the saved profiles in Supabase. It never calls Apify.
+> Dating reads only the saved profiles in Supabase. It never calls Apify.
 
-### How the judge scores a date
+---
 
-The judge rates five things from 0 to 10, and the final score is a weighted sum calculated in code. That keeps the scores spread out instead of clustering around one number.
-
-| Criterion | Weight | What it measures |
-| --- | --- | --- |
-| Shared interests | 25% | Concrete hobbies and interests that overlap in both profiles |
-| Values alignment | 25% | How well each person's "looking for" matches the other's life |
-| Chemistry | 25% | Whether the chat built real rapport: follow-ups, humour, reciprocity |
-| Lifestyle fit | 15% | Pace of life, schedules, location, life stage |
-| Profile evidence | 10% | How much real information the two profiles contain |
+##
 
 ---
 
@@ -84,7 +108,7 @@ The judge rates five things from 0 to 10, and the final score is a weighted sum 
 | --- | --- |
 | Frontend | Next.js 15 (App Router), React 19, TypeScript, Tailwind CSS 4, Lucide icons |
 | Backend | Next.js route handlers on Node.js |
-| Scraping | Apify: `apify/instagram-profile-scraper` and `harvestapi/linkedin-profile-scraper` |
+| Scraping | Apify: `apify/instagram-profile-scraper`, `harvestapi/linkedin-profile-scraper` |
 | AI models | OpenRouter with `openai/gpt-4o-mini` |
 | Agent orchestration | LangGraph (`@langchain/langgraph`) |
 | Database | Supabase Postgres with Row Level Security |
@@ -128,7 +152,7 @@ lib/
   store.ts                  Client state and streaming
   openrouter.ts             OpenRouter client
   supabase/admin.ts         Server-only Supabase client
-scripts/                    Command-line tools (see below)
+scripts/                    Command-line tools
 supabase/schema.sql         Database schema
 data.md                     The 25 people
 ```
@@ -190,7 +214,9 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000), choose a person and press **Start Dating**.
 
-### All commands
+---
+
+## Commands
 
 | Command | What it does |
 | --- | --- |
@@ -207,7 +233,7 @@ Open [http://localhost:3000](http://localhost:3000), choose a person and press *
 ## Responsible use
 
 - The people in this demo are real public figures. Their public posts support conversation topics, but they do not imply consent to a dating service.
-- Profiles use only publicly available text and say clearly where information is missing or uncertain.
+- Profiles use only publicly available text and state clearly where information is missing or uncertain.
 - No messages are ever sent to anyone's real accounts.
 - Every chat is labelled as a simulated AI conversation.
 
