@@ -8,11 +8,13 @@
 
 ## Demo video
 
-[![AgentMatch demo](https://img.youtube.com/vi/YOUR_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+[![AgentMatch demo](https://img.youtube.com/vi/WQeE1pkiRm8/hqdefault.jpg)](https://youtu.be/WQeE1pkiRm8)
 
-**Watch on YouTube:** [https://www.youtube.com/watch?v=YOUR_VIDEO_ID](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+**Watch on YouTube:** [https://youtu.be/WQeE1pkiRm8](https://youtu.be/WQeE1pkiRm8)
 
-<!-- Replace YOUR_VIDEO_ID in the three places above with your YouTube video ID. -->
+**Full recording:** [loom-video-1791939831115.mp4](loom-video-1791939831115.mp4)
+
+<video src="loom-video-1791939831115.mp4" controls width="100%"></video>
 
 ---
 
